@@ -49,9 +49,6 @@ public class UserOrdersServlet extends HttpServlet {
         
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            
-            final String DATA_TABLE_ORDERS = "Orders";
-            final String DATA_TABLE_LINE_ORDER = "Line_Order";
             try
             {
                 boolean found= false;
@@ -59,7 +56,7 @@ public class UserOrdersServlet extends HttpServlet {
                 MySQLUtils mySQL = new MySQLUtils();
                 Connection conn = mySQL.connectToMySql();
                 Statement stmtOrders =  conn.createStatement();
-                ResultSet rsOrders = stmtOrders.executeQuery("SELECT * FROM " + DATA_TABLE_ORDERS + " where userName='"+userName+"'");
+                ResultSet rsOrders = stmtOrders.executeQuery("SELECT * FROM " + MySQLUtils.ordersDataTableName + " where userName='"+userName+"'");
                 OrderData newOrder = null;
                 while(rsOrders.next())
                 {
@@ -68,7 +65,7 @@ public class UserOrdersServlet extends HttpServlet {
                     insertDataToOrderFomSQL(newOrder,rsOrders);
                     String orderID = rsOrders.getString("orderID");
                     Statement stmtItems =  conn.createStatement();
-                    ResultSet rsItems = stmtItems.executeQuery("SELECT * FROM " + DATA_TABLE_LINE_ORDER + " where orderID='"+orderID+"'");
+                    ResultSet rsItems = stmtItems.executeQuery("SELECT * FROM " + MySQLUtils.itemsDataTableName + " where orderID='"+orderID+"'");
                     while(rsItems.next())
                     {
                         ItemData newItem = new ItemData();

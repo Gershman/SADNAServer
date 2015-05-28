@@ -59,10 +59,9 @@ public class SignUpServlet extends HttpServlet {
 //        newUser.setPassword("123");
 //        newUser.setFirstName("sdfgsdg");
 //        newUser.setLastName("dfgdf");
-//        newUser.setUserName("tal.gdfg@gmail.com");
+//        newUser.setUserName("tal.gershman@gmail.com");
 //        newUser.setCountry("dfgdfg");
 //        
-        final String DATA_TABLE = "UserDetails";
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             try
@@ -70,7 +69,7 @@ public class SignUpServlet extends HttpServlet {
                 MySQLUtils mySQL = new MySQLUtils();
                 Connection conn = mySQL.connectToMySql();
                 Statement stmt =  conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT userName FROM " + DATA_TABLE + " where userName='"+newUser.getUserName()+"'");
+                ResultSet rs = stmt.executeQuery("SELECT userName FROM " + MySQLUtils.userDetailsDataTableName + " where userName = '" + newUser.getUserName()+"'");
                 if(!rs.next())
                 {
                     insertUserDetailsToTable(conn,newUser);
@@ -145,13 +144,9 @@ public class SignUpServlet extends HttpServlet {
         return sqlDate;
     }
 
-    private void insertUserDetailsToTable(Connection conn, User newUser) throws SQLException, ParseException {
-         
-        Statement stmt = null;
-        String DATA_TABLE = "UserDetails";
-        
-        stmt = conn.createStatement();
-        String query = "insert into " + DATA_TABLE + "(userName,password,firstName,lastName,country,birthday) VALUES (?,?,?,?,?,?)";
+    private void insertUserDetailsToTable(Connection conn, User newUser) throws SQLException, ParseException 
+    {
+        String query = "insert into " + MySQLUtils.userDetailsDataTableName + "(userName,password,firstName,lastName,country,birthday) VALUES (?,?,?,?,?,?)";
         PreparedStatement preparedStmt = conn.prepareStatement(query);
         preparedStmt.setString (1, newUser.getUserName());
         preparedStmt.setString (2, newUser.getPassword());

@@ -13,11 +13,14 @@ import java.sql.DriverManager;
  *
  * @author Tal
  */
-public class MySQLUtils {
+public class MySQLUtils 
+{
     
     private final String ADDRESS = "52.28.70.218"; // 52.17.209.130
     private final String DATA_BASE = "mailCenter";
-
+    public static final String ordersDataTableName = "Orders";
+    public static final String itemsDataTableName = "Line_Order";
+    public static final String userDetailsDataTableName = "UserDetails";
        
     public Connection connectToMySql()
     {

@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Servlets;
 
 import Utils.MySQLUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.servlet.ServletException;
@@ -20,10 +20,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Tal
+ * @author Nir
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/Login"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "UpdateItemArrivalStatusServlet", urlPatterns = {"/UpdateItemArrivalStatus"})
+public class UpdateItemArrivalStatusServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,14 +37,15 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String password = request.getParameter("password");
-        String userName = request.getParameter("email");
+        String orderID = request.getParameter("orderID");
+        String arrived = request.getParameter("arrived");
+        String itemID = request.getParameter("itemID");
         
-//        password = "123";
-//        userName = "tal.gdfg@gmail.com";
+//        orderID =  "mail.center.test@gmail.com&28/05/2015 19:52:29 ";
+//        itemID = "2";
+//        arrived = "true";
         
         response.setContentType("text/html;charset=UTF-8");
-        
         try (PrintWriter out = response.getWriter()) 
         {
             try
@@ -52,22 +53,30 @@ public class LoginServlet extends HttpServlet {
                 MySQLUtils mySQL = new MySQLUtils();
                 Connection conn = mySQL.connectToMySql();
                 Statement stmt =  conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT userName FROM " + MySQLUtils.userDetailsDataTableName + " where userName='"+userName+"' and password='"+password+"'");
-                if(rs.next())
+                ResultSet itemDetails = stmt.executeQuery("SELECT arrived FROM " + MySQLUtils.itemsDataTableName + " where orderID = '" + orderID + "' AND ID = '" + itemID + "'");
+                while(itemDetails.next())
                 {
-                   response.sendRedirect("main.html");
+                    String query = "update " + MySQLUtils.itemsDataTableName + " SET arrived = ? where orderID = ? and ID = ?";
+                    PreparedStatement preparedStmt = conn.prepareStatement(query);
+                    preparedStmt.setBoolean(1, Boolean.parseBoolean(arrived));
+                    preparedStmt.setString(2, orderID);
+                    preparedStmt.setString(3, itemID);
+                    
+                    preparedStmt.executeUpdate();
+                    preparedStmt.close();
                 }
-                else
-                {
-                    out.println("username or password are incorrect");
-                    conn.close();
-                }
+                
+                stmt.close();
+                conn.close();
+                
+                out.println("Success");
             }
             catch (Exception e)
             {
                 out.println("server is Down");
-            }
+            }    
         }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
