@@ -17,6 +17,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -51,6 +52,7 @@ public class UserOrdersServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             try
             {
+                LinkedList<OrderData> orderList = new LinkedList<>();
                 boolean found= false;
                 Gson gson = new Gson();
                 MySQLUtils mySQL = new MySQLUtils();
@@ -72,6 +74,7 @@ public class UserOrdersServlet extends HttpServlet {
                         insertDataToItemFromSQL(newItem,rsItems);
                         newOrder.getItems().add(newItem);
                     }
+                    orderList.add(newOrder);
                 }
                 if(found == false)
                 {
@@ -79,7 +82,7 @@ public class UserOrdersServlet extends HttpServlet {
                 }
                 else
                 {
-                    gson.toJson(newOrder, out);
+                    gson.toJson(orderList, out);
                 }
             }
             catch (Exception e)
@@ -171,5 +174,4 @@ public class UserOrdersServlet extends HttpServlet {
         newOrder.setTotalPrice(totalPrice);
         newOrder.setUserName(userName);
     }
-
 }
