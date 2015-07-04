@@ -135,7 +135,7 @@ public class UserOrdersServlet extends HttpServlet {
 
     private void insertDataToItemFromSQL(ItemData newItem, ResultSet rsItems) throws SQLException {
         
-        Date date = rsItems.getDate("ETA");
+        String date = rsItems.getDate("ETA").toString();
         String imageURL = rsItems.getString("imageURL");
         String ItemIDWebSite = rsItems.getString("ItemIDWebSite");
         double itemPrice = rsItems.getDouble("itemPrice");
@@ -143,6 +143,7 @@ public class UserOrdersServlet extends HttpServlet {
         int quantity = rsItems.getInt("quantity");
         double shippingCost = rsItems.getDouble("shippingCost");
         double totalPrice = rsItems.getDouble("totalPrice");
+        boolean arrived = rsItems.getBoolean("arrived");
         
         newItem.setETA(date);
         newItem.setImageURL(imageURL);
@@ -152,18 +153,20 @@ public class UserOrdersServlet extends HttpServlet {
         newItem.setQuantity(quantity);
         newItem.setShippingCost(shippingCost);
         newItem.setTotalPrice(totalPrice);
+        newItem.setArrived(arrived);
     }
 
     private void insertDataToOrderFomSQL(OrderData newOrder, ResultSet rsOrders) throws SQLException {
         
         String address = rsOrders.getString("address");
         String currency = rsOrders.getString("currency");
-        Date dateOrderRecivedToParse= rsOrders.getDate("dateOrderRecivedToParse");
-        Date orderDate = rsOrders.getDate("orderDate");
+        String dateOrderRecivedToParse= rsOrders.getDate("dateOrderRecivedToParse").toString();
+        String orderDate = rsOrders.getDate("orderDate").toString();
         double shippingCost = rsOrders.getDouble("shippingCost");
         String shoppingWebSite = rsOrders.getString("shoppingWebSite");
         double totalPrice = rsOrders.getDouble("totalPrice");
         String userName = rsOrders.getString("userName");
+        boolean arrived = rsOrders.getBoolean("arrived");
         
         newOrder.setAddress(address);
         newOrder.setCurrency(currency);
@@ -173,5 +176,6 @@ public class UserOrdersServlet extends HttpServlet {
         newOrder.setShoppingWebSite(shoppingWebSite);
         newOrder.setTotalPrice(totalPrice);
         newOrder.setUserName(userName);
+        newOrder.setArrived(arrived);
     }
 }

@@ -20,7 +20,16 @@ public class ItemData {
     private double totalPrice ;
     private String imageURL ;
     private double shippingCost ;
-    private Date ETA ;
+    private String ETA ;
+    private boolean arrived;
+
+    public boolean isArrived() {
+        return arrived;
+    }
+
+    public void setArrived(boolean arrived) {
+        this.arrived = arrived;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -50,7 +59,7 @@ public class ItemData {
         this.shippingCost = shippingCost;
     }
 
-    public void setETA(Date ETA) {
+    public void setETA(String ETA) {
         this.ETA = ETA;
     }
         

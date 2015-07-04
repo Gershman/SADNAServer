@@ -18,12 +18,13 @@ public class OrderData {
     private String userName ;
     private String shoppingWebSite ;
     private String orderID ;
-    private Date dateOrderReceivedToParse;
-    private Date orderDate ;
+    private String dateOrderReceivedToParse;
+    private String orderDate ;
     private String address ;
     private double shippingCost ; 
     private double totalPrice ;
     private String currency ;
+    private boolean arrived;
 
     private LinkedList<ItemData> items;
 
@@ -31,9 +32,17 @@ public class OrderData {
     {
         items = new LinkedList<ItemData>(); 
     }
-
+    
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public boolean isArrived() {
+        return arrived;
+    }
+
+    public void setArrived(boolean arrived) {
+        this.arrived = arrived;
     }
 
     public void setShoppingWebSite(String shoppingWebSite) {
@@ -44,11 +53,11 @@ public class OrderData {
         this.orderID = orderID;
     }
 
-    public void setDateOrderReceivedToParse(Date dateOrderReceivedToParse) {
+    public void setDateOrderReceivedToParse(String dateOrderReceivedToParse) {
         this.dateOrderReceivedToParse = dateOrderReceivedToParse;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(String orderDate) {
         this.orderDate = orderDate;
     }
 
